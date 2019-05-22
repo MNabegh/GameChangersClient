@@ -17,7 +17,7 @@ export class TeamService {
     reqHeaders.append('Content-Type', 'application/json');
     const currentToken = this.localStorageService.get('token');
     reqHeaders.append('Authorization', 'Bearer ' + currentToken);
-    return this.http.get(environment.apiUrl + "/teams/self", { headers: reqHeaders })
+    return this.http.get( "/teams/self", { headers: reqHeaders })
       .map(res => res.json());
   }
 
@@ -26,7 +26,7 @@ export class TeamService {
     reqHeaders.append('Content-Type', 'application/json');
     const currentToken = this.localStorageService.get('token');
     reqHeaders.append('Authorization', 'Bearer ' + currentToken);
-    return this.http.get(environment.apiUrl + `/teams/${teamName}`, { headers: reqHeaders })
+    return this.http.get( `/teams/${teamName}`, { headers: reqHeaders })
       .map(res => res.json());
   }
 
@@ -41,7 +41,7 @@ export class TeamService {
       lookingFor: teamInvitation.lookingFor,
       allowOthers: teamInvitation.allowOthers
     }
-    return this.http.post(environment.apiUrl + "/teams", body, { headers: reqHeaders })
+    return this.http.post( "/teams", body, { headers: reqHeaders })
     .map(res => {
       console.log(res.json())
       this.localStorageService.set("teamName", body.teamName)
@@ -59,7 +59,7 @@ export class TeamService {
     reqHeaders.append('Content-Type', 'application/json');
     const currentToken = this.localStorageService.get('token');
     reqHeaders.append('Authorization', 'Bearer ' + currentToken);
-    return this.http.get(environment.apiUrl + `/teams/search/${email}`, { headers: reqHeaders })
+    return this.http.get( `/teams/search/${email}`, { headers: reqHeaders })
       .map(res => res.json());
   }
 
@@ -68,7 +68,7 @@ export class TeamService {
     reqHeaders.append('Content-Type', 'application/json');
     const currentToken = this.localStorageService.get('token');
     reqHeaders.append('Authorization', 'Bearer ' + currentToken);
-    return this.http.get(environment.apiUrl + `/teams/invitations`, { headers: reqHeaders })
+    return this.http.get( `/teams/invitations`, { headers: reqHeaders })
       .map(res => res.json());
   }
 
@@ -78,20 +78,20 @@ export class TeamService {
       reqHeaders.append('Content-Type', 'application/json');
       const currentToken = this.localStorageService.get('token');
       reqHeaders.append('Authorization', 'Bearer ' + currentToken);
-      return this.http.put(environment.apiUrl + `/teams//invitations/${teamName}`, { accepted }, { headers: reqHeaders })
+      return this.http.put( `/teams//invitations/${teamName}`, { accepted }, { headers: reqHeaders })
         .map(res => res.json());
     }
   }
 
-  addTeamMember(email): Observable<any> {
+  addTeamMember(email, name): Observable<any> {
     const reqHeaders: Headers = new Headers();
     reqHeaders.append('Content-Type', 'application/json');
     const currentToken = this.localStorageService.get('token');
     reqHeaders.append('Authorization', 'Bearer ' + currentToken);
     let body = {
-      email
+      email, name
     }
-    return this.http.post(environment.apiUrl + "/teams/self/members", body, { headers: reqHeaders })
+    return this.http.post( "/teams/self/members", body, { headers: reqHeaders })
       .map(res => res.json());
   }
 
@@ -99,7 +99,7 @@ export class TeamService {
     const reqHeaders: Headers = new Headers();
     const currentToken = this.localStorageService.get('token');
     reqHeaders.append('Authorization', 'Bearer ' + currentToken);
-    return this.http.delete(environment.apiUrl + `/teams/self/members/${email}`, { headers: reqHeaders })
+    return this.http.delete( `/teams/self/members/${email}`, { headers: reqHeaders })
       .map(res => res.json());
   }
 
@@ -108,12 +108,11 @@ export class TeamService {
     reqHeaders.append('Content-Type', 'application/json');
     const currentToken = this.localStorageService.get('token');
     reqHeaders.append('Authorization', 'Bearer ' + currentToken);
-    return this.http.get(environment.apiUrl + "/teams/allTeams",{ headers: reqHeaders })
+    return this.http.get( "/teams/allTeams",{ headers: reqHeaders })
     .map(res => res.json());
   }
   
   joinTeam(teamName) {
-    console.log("HEERE YAAAAAY")
     const reqHeaders: Headers = new Headers();
     reqHeaders.append('Content-Type', 'application/json');
     const currentToken = this.localStorageService.get('token');
@@ -121,7 +120,25 @@ export class TeamService {
     let body = {
       teamName
     }
-    return this.http.post(environment.apiUrl + "/teams/join", body, { headers: reqHeaders })
+    return this.http.post( "/teams/join", body, { headers: reqHeaders })
+      .map(res => {
+        res.json()
+        this.localStorageService.set("token", res.json().data.token)
+      });
+   
+  }
+
+  editTeam(teamName, allowOthers, lookingFor){
+    const reqHeaders:Headers = new Headers();
+    reqHeaders.append('Content-Type', 'application/json');
+    const currentToken = this.localStorageService.get('token');
+    reqHeaders.append('Authorization', 'Bearer ' + currentToken);
+    let body = {
+      teamName: teamName,
+      allowOthers: allowOthers,
+      lookingFor: lookingFor
+    }
+    return this.http.post( "/teams/self/edit", body, { headers: reqHeaders })
       .map(res => res.json());
   }
 }

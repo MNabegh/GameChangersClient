@@ -92,8 +92,8 @@ export class ViewTeamComponent implements OnInit {
 
   leaveTeam() {
     this.userService.leaveTeam().subscribe((res) => {
-      window.location.reload();
-      // this.router.navigate([`./viewTeam/${this.teamName}`]);
+      // window.location.reload();
+      // this.router.navigate([`./profile`]);
     }, (err) => {
       this.errAlert = true;
       this.errMessage = 'Something went wrong, please try again later.';
@@ -113,6 +113,7 @@ export class ViewTeamComponent implements OnInit {
   ngOnInit() {
     this.hideAlerts();
     this.user = this.localStorageService.get('email');
+    this.user = this.user.toLowerCase();
     this.teamName = this.route.snapshot.params['teamName'];
     this.enableJoin = true
     this.teamService.getTeam(this.teamName).subscribe((res) => {
@@ -149,14 +150,14 @@ export class ViewTeamComponent implements OnInit {
       
       if (data != null) {
         this.ideaTitle = data.title;
-        this.ideaDescription = "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.";//data.ideaDescription;
+        this.ideaDescription = data.description;
         this.ideaFile = data.filename;
       } else {
         this.errAlert = true;
         this.errMessage = 'No idea was submitted.';
       }
     }, (err) => {
-      console.log("ERROOORRR IDEA" , err)
+      console.log("ERROR IDEA" , err)
       if (err.json().status == 404) {
         this.errAlert = true;
         this.errMessage = 'No idea was submitted.';

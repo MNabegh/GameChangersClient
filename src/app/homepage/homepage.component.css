@@ -88,7 +88,7 @@
     border-radius: 3%;
     padding: 2%;
     width: 30%;
-    height: 25%;
+    height: 9%;
     margin-top: 5%; 
 }
 
@@ -103,7 +103,7 @@
     border-radius: 3%;
     padding: 2%;
     width: 30%;
-    height: 25%;
+    height: 9%;
     margin-top: 0;
 }
 
@@ -162,6 +162,16 @@
  
 .home__inside-dell {
     color: #007DB8;
+}
+
+.home__gennext{
+    text-align: center;
+    padding-top: 2%;
+    /* margin: 10px auto; */
+    /* vertical-align: middle !important; */
+    /* padding-left: 20%; */
+    /* margin: 10px auto; */
+    
 }
 
 @media  (max-width: 600px) { 
